@@ -1,20 +1,20 @@
 <?php
-$servername = "localhost";
+
+$servername = "192.168.60.170";
+$port       = 8443;
+
 $username   = "docker";
 $password   = "docker-pass";
-$dbname     = "part-one";
+$dbname     = "docker-db";
+
+$result = null;
 
 try {
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
-    $sql = "INSERT INTO MyGuests (firstname, lastname, email) VALUES ('John', 'Doe', 'john@example.com')";
-    $conn->exec($sql);
-    
-    echo "New record created successfully";
-} catch(PDOException $e) {
-    echo $sql . "<br>" . $e->getMessage();
+    $db_connection = pg_connect("host=$servername port=$port dbname=$dbname user=$username password=$password");
+    $result = pg_query($db_connection, "SELECT * FROM user");
+} catch(\Exception $e) {
+    echo 'Error'.$e->getMessage();
 }
 
-$conn = null;
-?>
+var_dump($result);
+
